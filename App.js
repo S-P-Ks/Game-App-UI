@@ -13,18 +13,24 @@ import { AntDesign } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import { SvgUri } from "react-native-svg";
 import SVGImg from "./assets/gaming.svg";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./screens/HomeScreens.js";
+import { CardStyleInterpolators } from "@react-navigation/stack";
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "rgb(255, 45, 85)",
+  },
+};
 
 function Main({ navigation }) {
   let [fontsLoaded] = useFonts({
@@ -78,7 +84,7 @@ function Main({ navigation }) {
           <Text
             style={{
               color: "#fff",
-              fontFamily: "Roboto-Black",
+              fontFamily: "Roboto-Regular",
               fontSize: 20,
             }}
           >
@@ -91,16 +97,48 @@ function Main({ navigation }) {
   }
 }
 
+// const config = {
+//   animation: "spring",
+//   config: {
+//     stiffness: 10000,
+//     damping: 15000,
+//     mass: 5,
+//     overshootClamping: true,
+//     restDisplacementThreshold: 0.01,
+//     restSpeedThreshold: 0.01,
+//   },
+// };
+
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
+
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator>
         <Stack.Screen
           name="Main"
           component={Main}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            title: "Main",
+            cardStyleInterpolator:
+              CardStyleInterpolators.forFadeFromBottomAndroid,
+          }}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerShown: false,
+            title: "Home",
+            cardStyleInterpolator:
+              CardStyleInterpolators.forFadeFromBottomAndroid,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
